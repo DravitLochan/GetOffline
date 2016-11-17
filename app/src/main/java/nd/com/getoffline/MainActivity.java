@@ -25,10 +25,11 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
 
     //private EditText ed_url;
-    final Context context = this;
+    //if it NEEDS to be final, make the change
+    Context context;
     //private EditText result;
     String url,name;
-    SharedPreferences pref =getSharedPreferences("GetOfflinePref",Context.MODE_PRIVATE);
+    SharedPreferences pref;
 
 
 
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        context = this;
+        pref =getSharedPreferences("GetOfflinePref",Context.MODE_PRIVATE);
         /*ed_url =(EditText)findViewById(R.id.url);
         ed_url.setVisibility(View.GONE);*/
 
