@@ -114,13 +114,6 @@ public class MainActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor =pref.edit();
                                 editor.putString(name,url);
                                 editor.commit();
-                                String temp=pref.getString(name,null);
-                                /*
-                                try {
-                                    Document doc = Jsoup.connect(temp).timeout(10000).get();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }*/
 
                             }
                         })
