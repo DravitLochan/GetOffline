@@ -21,6 +21,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context = this;
         pref =getSharedPreferences("GetOfflinePref",Context.MODE_PRIVATE);
-        /*ed_url =(EditText)findViewById(R.id.url);
-        ed_url.setVisibility(View.GONE);*/
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                     givePrompt();
-                //ed_url.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -107,12 +111,17 @@ public class MainActivity extends AppCompatActivity {
 
                                 url=userInputU.getText().toString();
                                 name=userInputU.getText().toString();
-
-                                                    /*                                  **make changes here
                                 SharedPreferences.Editor editor =pref.edit();
                                 editor.putString(name,url);
                                 editor.commit();
-                                                    */
+                                String temp=pref.getString(name,null);
+                                /*
+                                try {
+                                    Document doc = Jsoup.connect(temp).timeout(10000).get();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }*/
+
                             }
                         })
                 .setNegativeButton("Cancel",
