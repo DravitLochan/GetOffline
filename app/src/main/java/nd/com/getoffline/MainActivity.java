@@ -1,16 +1,13 @@
-/*
-* here SharedPreferences are kinda messing up. without them(the  current state) is running properly. but as
-* soon as one uncoments the sharedpreference part, app crashes.
-* fix it!!
-*
-* */
 
 package nd.com.getoffline;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -20,12 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -108,13 +108,21 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,int id) {
                                 // get user input and set it to result
                                 // edit text
-
                                 url=userInputU.getText().toString();
                                 name=userInputU.getText().toString();
                                 SharedPreferences.Editor editor =pref.edit();
                                 editor.putString(name,url);
                                 editor.commit();
 
+                                try {
+                                    Document doc = (Document) Jsoup.parse(url);
+                                    String text = doc.title();//.toString();
+                                    text="text : " + text;
+                                    TextView t = (TextView) findViewById(R.id.temp);
+                                    t.setText( text);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         })
                 .setNegativeButton("Cancel",

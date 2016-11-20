@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:layout_below="@id/lnik_name"
+                android:layout_below="@id/link_name"
                 android:textSize="20sp" />
 
         </LineareLayout>
