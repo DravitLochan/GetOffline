@@ -1,6 +1,8 @@
 
 package nd.com.getoffline;
 
+import android.os.StrictMode.ThreadPolicy;
+import android.os.StrictMode;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,8 +27,13 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import android.speech.tts.TextToSpeech;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,13 +43,17 @@ public class MainActivity extends AppCompatActivity {
     //private EditText result;
     String url,name;
     SharedPreferences pref;
-
-
+    public static int SDK_INT = android.os.Build.VERSION.SDK_INT;
+    URL urlget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context = this;
@@ -109,20 +120,38 @@ public class MainActivity extends AppCompatActivity {
                                 // get user input and set it to result
                                 // edit text
                                 url=userInputU.getText().toString();
-                                name=userInputU.getText().toString();
-                                SharedPreferences.Editor editor =pref.edit();
-                                editor.putString(name,url);
-                                editor.commit();
-
+                                String title="";
                                 try {
-                                    Document doc = (Document) Jsoup.parse(url);
-                                    String text = doc.title();//.toString();
-                                    text="text : " + text;
-                                    TextView t = (TextView) findViewById(R.id.temp);
-                                    t.setText( text);
-                                } catch (Exception e) {
+                                    urlget = new URL(url);
+                                } catch (MalformedURLException e) {
                                     e.printStackTrace();
                                 }
+                                name=userInputN.getText().toString();
+                                SharedPreferences.Editor editor =pref.edit();
+                                editor.putString(name,url.toString());
+                                editor.commit();
+
+                                BufferedReader reader = null;
+                                try {
+                                    reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    StringBuilder builder=new StringBuilder();
+                                    for (String line; (line = reader.readLine()) != null;) {
+                                        title=title+line;
+                                        builder.append(line.trim());
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
+                                }
+
+                                EditText t = (EditText) findViewById(R.id.title);
+                                t.setText(title);
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -139,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
     }
+
 
 }
 

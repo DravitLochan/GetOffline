@@ -23,22 +23,11 @@
         android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
-    </android.support.v7.widget.RecyclerView>-->
+    </android.support.v7.widget.RecyclerView>
+-->
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/temp"
-        android:scrollHorizontally="true">
-        </TextView>
-
-    <TextView
-        android:text="Text View"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/temp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:id="@+id/textView"
-        android:layout_height="30dp" />
-
+        android:id="@+id/title"/>
 </RelativeLayout>
