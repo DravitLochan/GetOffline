@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -66,10 +68,33 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "add the link to the webpage in the following prompt!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
+                   if(checkInternet())
                     givePrompt();
+                    else
+                       Snackbar.make(view,"You need a working internet connection!",Snackbar.LENGTH_LONG)
+                               .setAction("Action",null).show();
             }
         });
+    }
+
+    private boolean checkInternet() {
+
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);//
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+
+
     }
 
     @Override
@@ -131,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putString(name,url.toString());
                                 editor.commit();
 
+                                /*
+                                * code for checking the existancec of url goes here
+                                 */
+
+                                checkURL();
+
                                 BufferedReader reader = null;
                                 try {
                                     reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
@@ -166,6 +197,12 @@ public class MainActivity extends AppCompatActivity {
 
         // show it
         alertDialog.show();
+
+    }
+
+    private boolean checkURL() {
+
+        return true;
 
     }
 
