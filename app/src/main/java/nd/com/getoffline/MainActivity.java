@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import java.net.HttpURLConnection;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);//
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
@@ -117,6 +118,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    boolean checkURL(String u)
+    {
+        try {
+            HttpURLConnection.setFollowRedirects(false);        //
+            HttpURLConnection con = (HttpURLConnection) new URL(u).openConnection();
+            con.setConnectTimeout(1000);
+            con.setReadTimeout(1000);
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void givePrompt()
@@ -160,29 +176,40 @@ public class MainActivity extends AppCompatActivity {
                                 * code for checking the existancec of url goes here
                                  */
 
-                                checkURL();
+                                if(checkURL(url))
+                                {
+                                   //scrapePage(urlget);
 
-                                BufferedReader reader = null;
-                                try {
-                                    reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
+                                    BufferedReader reader = null;
+                                    try {
+                                        reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
 
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    StringBuilder builder=new StringBuilder();
-                                    for (String line; (line = reader.readLine()) != null;) {
-                                        title=title+line;
-                                        builder.append(line.trim());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
-                                }
+                                    try {
+                                        StringBuilder builder=new StringBuilder();
+                                        for (String line; (line = reader.readLine()) != null;) {
+                                            title=title+line;
+                                            builder.append(line.trim());
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
+                                    }
 
-                                EditText t = (EditText) findViewById(R.id.title);
-                                t.setText(title);
+                                    EditText t = (EditText) findViewById(R.id.title);
+                                    t.setText(title);
+
+                                }
+                                else
+                                {
+                                    Toast.makeText(context, "Invalid URL!!!", Toast.LENGTH_LONG).show();
+                                }
+                                //below onwards, for cleaning purpose, add the code to scrapePage() method.
+                                //maybe you need to put it in the async's doInBackGround().
+
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -200,11 +227,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkURL() {
 
-        return true;
+    public void scrapePage(URL url)
+    {
+        /*
+         * after confirmation of url being correct, scrape the page.
+         *  after that make a .html file with the name given by the user and save in the default directory.
+         *  on click of the recycler view's entity, open the file in default browser.
+         *  also store the path of the .html file in shared preferences.
+         */
+
+        EditText title ;
+        title= (EditText) findViewById(R.id.title);
 
     }
+
 
 
 }
