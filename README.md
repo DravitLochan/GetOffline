@@ -17,15 +17,16 @@ take them offline too.
 status:-
 
 
-1. recyclerview needs to be added.
+1. recyclerview needs to be added.		--top most priority
 
-2. report a page not being scraped. 
+2. report a page not being scraped. 		--2nd update
 
-3. check url exists or not.
+3. check url exists or not.			--done
 
-4. share a saved page.
+4. share a saved page.				--2nd update
 
-5. do the scraping part in async's doInBackground.
+5. do the scraping part in async's		--on to it 
+doInBackground.
 
 
 Cheers! Happy Coding!
