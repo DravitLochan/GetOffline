@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_main">
 
     <!-- add the list of downloaded pages using recyclerView and shared preferences-->
-<!--    <android.support.v7.widget.RecyclerView
+      <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
@@ -24,7 +24,7 @@
         android:paddingTop="16dp">
 
     </android.support.v7.widget.RecyclerView>
--->
+
 
     <!--
     <EditText

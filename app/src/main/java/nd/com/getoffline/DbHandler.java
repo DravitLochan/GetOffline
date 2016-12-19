@@ -52,11 +52,16 @@ public class DbHandler extends SQLiteOpenHelper {
         db.insert(TABLE_PAGE,null,cv);
         db.close();
     }
-        //add in the first version
+        //add in the second version
     /*
     void deletePage()
     {
-
+                while writting the codes for this, make the changes in the
+                 insert query. as of now, while making a new entry,
+                 it is just finding the count of the
+                 pages in the database and adds 1 to it and makes it the id for the new entry.
+                  but when delete will be implemented, what has to be done is
+                  find the greatest of all the ids and add 1 to it.
     }
     */
 

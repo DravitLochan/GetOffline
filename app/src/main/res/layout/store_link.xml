@@ -26,15 +26,6 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/link_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:layout_below="@id/link_name"
-                android:textSize="20sp" />
-
         </LineareLayout>
     </android.support.v7.widget.CardView>
 

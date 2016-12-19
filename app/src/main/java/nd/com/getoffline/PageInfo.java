@@ -24,6 +24,8 @@ public class PageInfo {
         this.src_code=src_code;
     }
 
+    /*
+                                            as of now, these methods are not needed.
     public void setId(int id)
     {
         this.id=id;
@@ -38,6 +40,7 @@ public class PageInfo {
     {
         this.src_code=src_code;
     }
+    */
 
     public int getId()
     {

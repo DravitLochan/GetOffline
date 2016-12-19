@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,6 +45,22 @@ import org.jsoup.nodes.Document;
 import android.speech.tts.TextToSpeech;
 
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class MainActivity extends AppCompatActivity {
 
     Context context;
@@ -53,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     public static int SDK_INT = android.os.Build.VERSION.SDK_INT;
     URL urlget;
     DbHandler dbase= new DbHandler(this);
+    private List<PageInfo>pageList =new ArrayList<>();
+    private RecyclerView recyclerview;
+    private MyAdap adap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +84,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context = this;
         //pref =getSharedPreferences("GOPref",Context.MODE_PRIVATE);
-
+        recyclerview=(RecyclerView)findViewById(R.id.recview);
+        adap=new MyAdap(pageList);
+        RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerview.setLayoutManager(pLayoutManager);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setAdapter(adap);
+        setPageList();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +106,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
+    private void setPageList() {
+        pageList=dbase.getAllPages();
+        adap.notifyDataSetChanged();
+    }
     private boolean checkInternet()
     {
 
@@ -128,14 +154,15 @@ public class MainActivity extends AppCompatActivity {
     boolean checkURL(String u)
     {
         try {
-            HttpURLConnection.setFollowRedirects(false);        //
-            HttpURLConnection con = (HttpURLConnection) new URL(u).openConnection();
-            con.setConnectTimeout(1000);
-            con.setReadTimeout(1000);
-            con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (Exception e) {
-            e.printStackTrace();
+            URL url = new URL(u);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            return true;
+        } catch (MalformedURLException e) {
+            Toast.makeText(context, "the URL is not in a valid form!!!", Toast.LENGTH_LONG).show();// the URL is not in a valid form
+            return false;
+        } catch (IOException e) {
+            Toast.makeText(context, " the connection couldn't be established!!!", Toast.LENGTH_LONG).show();// the connection couldn't be established
             return false;
         }
     }
@@ -169,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("ADD",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // get user input and set it to result
-                                // edit text
                                 url=userInputU.getText().toString();
                                 String code="";
                                 try {
@@ -179,16 +204,8 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 name=userInputN.getText().toString();
-                                /*SharedPreferences.Editor editor =pref.edit();
-                                editor.putString(name,url.toString());
-                                editor.commit();*/
-
-
-                                //  code for checking the existancec of url goes here
                                 if(checkURL(url))
                                 {
-                                   //scrapePage(urlget);
-
                                     BufferedReader reader = null;
                                     try {
                                         reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
@@ -207,18 +224,8 @@ public class MainActivity extends AppCompatActivity {
                                     } finally {
                                         if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
                                     }
-                                    /*
-                                    this was added on temprory basis to check that the page is scraped properly or not
-                                    EditText t = (EditText) findViewById(R.id.title);
-                                    t.setText(code);*/
                                     dbase.addPage(new PageInfo(dbase.countPages()+1,name,code));
-                                    //Log.d("no of pages added",dbase.countPages()+"");
-                                    //Log.d("src is :", code+"");
-                                    //remove this. instead add an implenetation for putting this code along eith the name in the database
-                                }
-                                else
-                                {
-                                    Toast.makeText(context, "Invalid URL!!!", Toast.LENGTH_LONG).show();
+                                    Log.d("added to the db",code);
                                 }
                             }
                         })
@@ -228,64 +235,10 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         });
-
-        // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
         alertDialog.show();
-
     }
 
-    public void giveBrknPrompt()
-    {
-        LayoutInflater li = LayoutInflater.from(context);
-        View promptsView = li.inflate(R.layout.report_prompts, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-
-        final EditText brknPgURL = (EditText) promptsView
-                .findViewById(R.id.brkn_pg_url);
-
-        final EditText brknPgName=(EditText) promptsView
-                .findViewById(R.id.brkn_pg_name);
-
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("ADD",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                if(brknPgURL.toString().equals(""))
-                                {
-                                    Toast.makeText(context,"enter the url",Toast.LENGTH_LONG).show();
-                                }
-                                else if(checkURL(brknPgURL.toString()))
-                                {
-
-                                }
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-
-    }
-
-
+    //add a function to report a page
 
 }
-
