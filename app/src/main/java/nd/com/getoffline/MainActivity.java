@@ -175,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    public void makeEntry(int id, String name, String code)
+    {
+        PageInfo p = new PageInfo(id,name,code);
+        pageList.add(p);
+        adap.notifyDataSetChanged();
+    }
+
     public void givePrompt()
     {
         LayoutInflater li = LayoutInflater.from(context);
@@ -227,7 +235,9 @@ public class MainActivity extends AppCompatActivity {
                                     } finally {
                                         if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
                                     }
-                                    dbase.addPage(new PageInfo(dbase.countPages()+1,name,code));
+                                    int count = dbase.countPages()+1;
+                                    dbase.addPage(new PageInfo(count,name,code));
+                                    makeEntry(count, name, code);
                                     Log.d("added to the db",code);
                                 }
                             }
