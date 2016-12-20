@@ -26,6 +26,7 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
     }
 
     public MyAdap(List<PageInfo> pageList) {
+
         this.pageList = pageList;
     }
 
@@ -40,8 +41,8 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyAdap.MyViewHolder holder, int position) {
 
-        PageInfo page = pageList.get(position);
-        holder.ln.setText(page.getName());
+        holder.ln.setText(pageList.get(position).getName());
+
     }
 
     @Override
