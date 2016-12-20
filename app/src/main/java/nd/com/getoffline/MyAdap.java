@@ -30,7 +30,7 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
     }
 
     @Override
-    public MyAdap.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.store_link, parent, false);
 

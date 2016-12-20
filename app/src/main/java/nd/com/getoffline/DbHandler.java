@@ -47,6 +47,7 @@ public class DbHandler extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put(KEY_ID,pageinfo.getId());
         cv.put(KEY_NAME,pageinfo.getName());
         cv.put(KEY_SRC_CODE,pageinfo.getSrcCode());
         db.insert(TABLE_PAGE,null,cv);
@@ -77,8 +78,8 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     //to fetch the name of all the pages and put them in a recycler view
-    public List<PageInfo> getAllPages() {
-        List<PageInfo> contactList = new ArrayList<PageInfo>();
+    public List<PageInfo> getAllPages(List<PageInfo> pageList) {
+        //List<PageInfo> contactList = new ArrayList<PageInfo>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_PAGE;
 
@@ -90,12 +91,12 @@ public class DbHandler extends SQLiteOpenHelper {
             do {
                 PageInfo pageinfo = new PageInfo(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(2));
                 // Adding contact to list
-                contactList.add(pageinfo);
+                pageList.add(pageinfo);
             } while (cursor.moveToNext());
         }
         db.close();
         // return contact list
-        return contactList;
+        return pageList;
     }
 
 

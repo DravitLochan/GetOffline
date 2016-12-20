@@ -26,7 +26,6 @@ import android.widget.Toast;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.io.File;
@@ -38,13 +37,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
-
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import android.speech.tts.TextToSpeech;
-
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -56,13 +51,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
-
     Context context;
     String url,name;
     //SharedPreferences pref;
@@ -106,16 +98,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void setPageList() {
-        pageList=dbase.getAllPages();
+    private void setPageList()
+    {
+        pageList=dbase.getAllPages(pageList);
+        /*PageInfo p = new PageInfo(1,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(2,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(3,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(4,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(5,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(6,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(7,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(8,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(9,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(10,"test","this is the test src code");
+        pageList.add(p);
+        p = new PageInfo(11,"test","this is the test src code");
+        pageList.add(p);*/
         adap.notifyDataSetChanged();
     }
     private boolean checkInternet()
     {
-
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
-
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
@@ -128,14 +141,12 @@ public class MainActivity extends AppCompatActivity {
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -147,10 +158,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
     boolean checkURL(String u)
     {
         try {
@@ -166,30 +175,24 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-
     public void givePrompt()
     {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.prompts, null);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
-
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
-
         final EditText userInputU = (EditText) promptsView
                 .findViewById(R.id.UserInputURL);
         userInputU.setText("");                     //to make sure that the previous url is not selected.
                                                     // that is, if the user is trying to scrape a page (which may be diffrent),
                                                     //  2nd time in succession, the vslue of previous page is not selected
-
         final EditText userInputN=(EditText) promptsView
                 .findViewById(R.id.UserInputName);
         userInputN.setText("");                     //to make sure that the previous url is not selected.
                                                     // that is, if the user is trying to scrape a page (which may be diffrent),
                                                     //  2nd time in succession, the vslue of previous page is not selected
-
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
@@ -238,7 +241,5 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
     //add a function to report a page
-
 }

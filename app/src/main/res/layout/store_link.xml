@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  <!--  <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical">-->
 
             <TextView
                 android:id="@+id/link_name"
@@ -26,7 +26,7 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="20sp" />
 
-        </LineareLayout>
-    </android.support.v7.widget.CardView>
+       <!-- </LineareLayout>
+    </android.support.v7.widget.CardView>-->
 
 </LinearLayout>

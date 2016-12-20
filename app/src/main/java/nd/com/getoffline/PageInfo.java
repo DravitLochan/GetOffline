@@ -17,7 +17,7 @@ public class PageInfo {
 
         Toast.makeText(context, "Internal error. try again!", Toast.LENGTH_LONG).show();
     }
-    public PageInfo(int id, String src_code, String name)
+    public PageInfo(int id, String name, String src_code)
     {
         this.id=id;
         this.name=name;
