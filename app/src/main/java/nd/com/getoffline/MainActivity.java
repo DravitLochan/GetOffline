@@ -101,28 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPageList()
     {
         pageList=dbase.getAllPages(pageList);
-        /*PageInfo p = new PageInfo(1,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(2,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(3,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(4,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(5,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(6,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(7,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(8,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(9,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(10,"test","this is the test src code");
-        pageList.add(p);
-        p = new PageInfo(11,"test","this is the test src code");
-        pageList.add(p);*/
+        
         adap.notifyDataSetChanged();
     }
     private boolean checkInternet()
