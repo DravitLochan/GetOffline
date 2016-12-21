@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerview;
     private MyAdap adap;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -85,13 +85,16 @@ public class MainActivity extends AppCompatActivity {
         recyclerview.addOnItemTouchListener(
                 new RecyclerItemClickListener(context, recyclerview ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                        Toast.makeText(context,pageList.get(position).getName()+" clicked",Toast.LENGTH_SHORT).show();
+                        //
+                        //Toast.makeText(context,pageList.get(position).getSrcCode()+" clicked",Toast.LENGTH_SHORT).show();
+                        Intent i= new Intent(context,webpage.class);
+                        i.putExtra("src",pageList.get(position).getSrcCode());
+                        startActivity(i);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                        Toast.makeText(context,pageList.get(position).getName()+" long pressed",Toast.LENGTH_LONG).show();
+                        // implement deletion
+                        Toast.makeText(context,"deletion of a page comming soon!!",Toast.LENGTH_LONG).show();
                     }
                 })
         );
