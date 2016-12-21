@@ -82,7 +82,21 @@ public class MainActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(pLayoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(adap);
+        recyclerview.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, recyclerview ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Toast.makeText(context,pageList.get(position).getName()+" clicked",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                        Toast.makeText(context,pageList.get(position).getName()+" long pressed",Toast.LENGTH_LONG).show();
+                    }
+                })
+        );
         setPageList();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +169,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    boolean checkNameNotExists(String name)
+    {
+        name=name+"";
+        for(int i=0;i<pageList.size();++i)
+        {
+            if(name.equals(pageList.get(i).getName()))
+            {
+                //Toast.makeText();
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void makeEntry(int id, String name, String code)
     {
         PageInfo p = new PageInfo(id,name,code);
@@ -186,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("ADD",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
+
                                 url=userInputU.getText().toString();
                                 String code="";
                                 try {
@@ -194,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 name=userInputN.getText().toString();
-                                if(checkURL(url))
+                                boolean temp=checkNameNotExists(name);
+                                if(checkURL(url)&&temp)
                                 {
                                     BufferedReader reader = null;
                                     try {
@@ -219,6 +249,10 @@ public class MainActivity extends AppCompatActivity {
                                     makeEntry(count, name, code);
                                     Log.d("added to the db",code);
                                 }
+                                else if(!temp)
+                                {
+                                    Toast.makeText(context,"name of 2 offline pages can't be same!",Toast.LENGTH_LONG).show();
+                                }
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -229,6 +263,11 @@ public class MainActivity extends AppCompatActivity {
                         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
     }
     //add a function to report a page
 }

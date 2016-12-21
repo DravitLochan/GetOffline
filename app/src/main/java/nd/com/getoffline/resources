@@ -1,0 +1,8 @@
+1. For recyclerview onclick listener, the solution given here is implemented!
+http://stackoverflow.com/questions/24471109/recyclerview-onclick/26196831#26196831
+{
+    could also use:=
+    (https://gist.github.com/grantland/cd70814fe4ac369e3e92)
+}
+ask some pro about recyclerview item click listener cause I know that there is some problem with
+the current implementation.
