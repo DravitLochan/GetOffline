@@ -1,6 +1,8 @@
 package nd.com.getoffline;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import java.util.List;
 
 public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
     private List<PageInfo> pageList;
+    Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView ln;
@@ -25,8 +28,9 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
         }
     }
 
-    public MyAdap(List<PageInfo> pageList) {
+    public MyAdap(Context context,List<PageInfo> pageList) {
 
+        this.context=context;
         this.pageList = pageList;
     }
 
@@ -39,9 +43,19 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MyAdap.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyAdap.MyViewHolder holder,final int position) {
 
         holder.ln.setText(pageList.get(position).getName());
+
+        holder.ln.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i= new Intent(context,webpage.class);
+                i.putExtra("src",pageList.get(position).getSrcCode());
+                context.startActivity(i);
+
+            }
+        });
 
     }
 

@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,8 +39,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import android.speech.tts.TextToSpeech;
 import android.content.Context;
 import android.os.Bundle;
@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         //pref =getSharedPreferences("GOPref",Context.MODE_PRIVATE);
         recyclerview=(RecyclerView)findViewById(R.id.recview);
-        adap=new MyAdap(pageList);
+        adap=new MyAdap(this,pageList);
         RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerview.setLayoutManager(pLayoutManager);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(adap);
-        recyclerview.addOnItemTouchListener(
+    /*    recyclerview.addOnItemTouchListener(
                 new RecyclerItemClickListener(context, recyclerview ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         //
@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(context,"deletion of a page comming soon!!",Toast.LENGTH_LONG).show();
                     }
                 })
-        );
+        );*/
+
         setPageList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -229,27 +230,20 @@ public class MainActivity extends AppCompatActivity {
                                 boolean temp=checkNameNotExists(name);
                                 if(checkURL(url)&&temp)
                                 {
-                                    BufferedReader reader = null;
-                                    try {
-                                        reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
+                                    WebView webView = new WebView(MainActivity.this);
+                                    webView.getSettings().setAppCacheMaxSize( 5 * 1024 * 1024 ); // 5MB
+                                    webView.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
+                                    webView.getSettings().setAllowFileAccess( true );
+                                    webView.getSettings().setAppCacheEnabled( true );
+                                    webView.getSettings().setJavaScriptEnabled( true );
+                                    webView.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
 
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    try {
-                                        StringBuilder builder=new StringBuilder();
-                                        for (String line; (line = reader.readLine()) != null;) {
-                                            code=code+line;
-                                            builder.append(line.trim());
-                                        }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
-                                    }
+                                    webView.loadUrl(url);
+
+
                                     int count = dbase.countPages()+1;
-                                    dbase.addPage(new PageInfo(count,name,code));
-                                    makeEntry(count, name, code);
+                                    dbase.addPage(new PageInfo(count,name,url));
+                                    makeEntry(count, name, url);
                                     Log.d("added to the db",code);
                                 }
                                 else if(!temp)
