@@ -187,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void makeEntry(int id, String name, String code)
+    public void makeEntry(int id, String name, String code,String url)
     {
-        PageInfo p = new PageInfo(id,name,code);
+        PageInfo p = new PageInfo(id,name,code,url);
         pageList.add(p);
         adap.notifyDataSetChanged();
     }
@@ -237,13 +237,31 @@ public class MainActivity extends AppCompatActivity {
                                     webView.getSettings().setAppCacheEnabled( true );
                                     webView.getSettings().setJavaScriptEnabled( true );
                                     webView.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
+                                    BufferedReader reader = null;
+                                    try {
+                                        reader = new BufferedReader(new InputStreamReader(urlget.openStream(), "UTF-8"));
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        StringBuilder builder=new StringBuilder();
+                                        for (String line; (line = reader.readLine()) != null;) {
+                                            code=code+line;
+                                            builder.append(line.trim());
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
+                                    }
 
                                     webView.loadUrl(url);
 
 
                                     int count = dbase.countPages()+1;
-                                    dbase.addPage(new PageInfo(count,name,url));
-                                    makeEntry(count, name, url);
+                                    dbase.addPage(new PageInfo(count,name,code,url));
+                                    makeEntry(count, name,code, url);
                                     Log.d("added to the db",code);
                                 }
                                 else if(!temp)

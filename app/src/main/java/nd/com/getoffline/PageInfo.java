@@ -10,18 +10,19 @@ import android.widget.Toast;
 public class PageInfo {
 
     int id;
-    private String name,src_code;
+    private String name,src_code,url;
     Context context;
     public PageInfo()
     {
 
         Toast.makeText(context, "Internal error. try again!", Toast.LENGTH_LONG).show();
     }
-    public PageInfo(int id, String name, String src_code)
+    public PageInfo(int id, String name, String src_code,String url)
     {
         this.id=id;
         this.name=name;
         this.src_code=src_code;
+        this.url=url;
     }
 
     /*
@@ -57,4 +58,8 @@ public class PageInfo {
         return this.src_code;
     }
 
+    public String getUrl()
+    {
+        return this.url;
+    }
 }

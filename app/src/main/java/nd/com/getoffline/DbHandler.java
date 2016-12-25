@@ -21,6 +21,7 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_SRC_CODE = "src_code";
+    private static final String KEY_URL = "url";
 
 
     public DbHandler(Context context) {
@@ -32,7 +33,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PAGE_TABLE = "CREATE TABLE " + TABLE_PAGE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_SRC_CODE + " TEXT" + ")";
+                + KEY_SRC_CODE + " TEXT, " + KEY_URL+" TEXT"+")";
         db.execSQL(CREATE_PAGE_TABLE);
     }
 
@@ -50,6 +51,7 @@ public class DbHandler extends SQLiteOpenHelper {
         cv.put(KEY_ID,pageinfo.getId());
         cv.put(KEY_NAME,pageinfo.getName());
         cv.put(KEY_SRC_CODE,pageinfo.getSrcCode());
+        cv.put(KEY_URL,pageinfo.getUrl());
         db.insert(TABLE_PAGE,null,cv);
         db.close();
     }
@@ -89,7 +91,7 @@ public class DbHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                PageInfo pageinfo = new PageInfo(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(2));
+                PageInfo pageinfo = new PageInfo(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3));
                 // Adding contact to list
                 pageList.add(pageinfo);
             } while (cursor.moveToNext());

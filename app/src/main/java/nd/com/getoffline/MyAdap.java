@@ -51,7 +51,8 @@ public class MyAdap extends RecyclerView.Adapter<MyAdap.MyViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent i= new Intent(context,webpage.class);
-                i.putExtra("src",pageList.get(position).getSrcCode());
+                //i.putExtra("src",pageList.get(position).getSrcCode());
+                i.putExtra("position",position);
                 context.startActivity(i);
 
             }
