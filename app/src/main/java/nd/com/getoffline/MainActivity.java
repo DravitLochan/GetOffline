@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Toast.makeText(getApplicationContext(),"settings selected!!",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
