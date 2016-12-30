@@ -4,28 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Enter the URL for the page which appears to be broken :"
+        android:text="Enter the URL for the page which you are getting as invalid :"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/msg_field"
         android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
-    <EditText
-        android:id="@+id/brkn_pg_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="enter the name for webpage">
 
-        <requestFocus/>
-
-    </EditText>
 
     <EditText
         android:id="@+id/brkn_pg_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="URL goes here">
-
+        <requestFocus/>
     </EditText>
 
 

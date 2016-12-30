@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     //SharedPreferences pref;
     public static int SDK_INT = android.os.Build.VERSION.SDK_INT;
     URL urlget;
+    EditText brknURL;
     DbHandler dbase= new DbHandler(this);
     private List<PageInfo>pageList =new ArrayList<>();
     private RecyclerView recyclerview;
@@ -152,9 +153,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(getApplicationContext(),"settings selected!!",Toast.LENGTH_SHORT).show();
-        }
+        /*if (id == R.id.report) {
+            LayoutInflater li = LayoutInflater.from(context);
+            View promptsView2 = li.inflate(R.layout.report_prompts, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set prompts.xml to alertdialog builder
+            final String to="dravit.lochan@gmail.com";
+            alertDialogBuilder.setView(promptsView2);
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("ADD",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                            brknURL=(EditText)findViewById(R.id.brkn_pg_url);
+                                            String brkn_url=brknURL.getText().toString();
+                                            send_mail s= new send_mail();
+                                            s.send(brkn_url);
+                                        }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            //Toast.makeText(context,"report page",Toast.LENGTH_SHORT).show();
+        }*/
         return super.onOptionsItemSelected(item);
     }
     boolean checkURL(String u)

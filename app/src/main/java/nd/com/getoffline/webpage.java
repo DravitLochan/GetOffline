@@ -1,11 +1,13 @@
 package nd.com.getoffline;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceResponse;
@@ -23,6 +25,7 @@ public class webpage extends AppCompatActivity {
     String src;
     List<PageInfo> pages;
     int position;
+    final Activity activity=this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,37 +46,39 @@ public class webpage extends AppCompatActivity {
         webView.getSettings().setAllowFileAccess( true );
         webView.getSettings().setAppCacheEnabled( true );
         webView.getSettings().setJavaScriptEnabled( true );
+        webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );//loads from cache if offline else online
      //   webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ONLY );//loads from cache only
 
-        //Toast.makeText(this,"page opening",Toast.LENGTH_SHORT).show();
-        Toast.makeText(this,"page opening. Due to heavy file, page may load in only readable form",Toast.LENGTH_LONG).show();
-        webView.loadUrl(url);
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress)
+            {
+                activity.setTitle("Loading...");
+                activity.setProgress(progress * 100);
 
-
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                webView.loadData(src,"text/html",null);
-            }
-
-            @Override
-            public void onReceivedHttpError(
-                    WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-                webView.loadData(src,"text/html",null);
-            }
-
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                           SslError error) {
-                webView.loadData(src,"text/html",null);
+                if(progress == 100)
+                    activity.setTitle(R.string.app_name);
             }
         });
 
-//        p.loadData(str,"text/html",null);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
+            {
+                // Handle the error
+                webView.loadData(src,"text/html; charset=UTF-8",null);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url)
+            {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+        Toast.makeText(this,"page opening. Due to heavy file, page may load in only readable form",Toast.LENGTH_LONG).show();
+        webView.loadUrl(url);
     }
+
 }
